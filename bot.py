@@ -11,7 +11,7 @@ import asyncio
 
 # ========== НАСТРОЙКИ ==========
 BOT_TOKEN = "8659068385:AAGczzHbQ1U7KVtY0h7g8hz8D9_RzVMaoio"
-WEBAPP_URL = "http://localhost:8080"  # потом заменишь на serveo/ngrok
+WEBAPP_URL = "WEBAPP_URL = "https://gebong.github.io/pepe-casino""  # потом заменишь на serveo/ngrok
 PORT = 8080
 
 # ========== ЛОГИРОВАНИЕ ==========
@@ -201,4 +201,5 @@ def run_bot():
 
 if __name__ == "__main__":
     threading.Thread(target=lambda: asyncio.run(start_server())).start()
+
     run_bot()
