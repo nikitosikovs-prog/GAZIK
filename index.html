@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PEPE CASINO 🐸</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #0a1a0a 0%, #1a3a1a 100%);
+            min-height: 100vh;
+            color: #fff;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Пепе-паттерн на фоне */
+        body::before {
+            content: "🐸";
+            position: absolute;
+            font-size: 120px;
+            opacity: 0.03;
+            top: 10%;
+            left: -20px;
+            transform: rotate(-15deg);
+            pointer-events: none;
+        }
+
+        body::after {
+            content: "🐸";
+            position: absolute;
+            font-size: 200px;
+            opacity: 0.03;
+            bottom: 0;
+            right: -40px;
+            transform: rotate(25deg);
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 16px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Хедер с балансом */
+        .header {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 2px solid #7b3f00;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: "👑🐸👑";
+            position: absolute;
+            top: -10px;
+            right: -20px;
+            font-size: 60px;
+            opacity: 0.1;
+            transform: rotate(20deg);
+        }
+
+        .user-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .pepe-avatar {
+            width: 60px;
+            height: 60px;
+            background: #2b5e2b;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            border: 3px solid #ffd700;
+            box-shadow: 0 0 20px #ffd700;
+            animation: pepeGlow 2s infinite;
+        }
+
+        @keyframes pepeGlow {
+            0%, 100% { box-shadow: 0 0 20px #ffd700; }
+            50% { box-shadow: 0 0 40px #ffaa00; }
+        }
+
+        .user-info h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffd700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .user-info p {
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .balance-block {
+            background: linear-gradient(145deg, #1e3a1e, #0f2a0f);
+            border-radius: 20px;
+            padding: 15px;
+            border: 1px solid #7b3f00;
+        }
+
+        .balance-label {
+            color: #ffd700;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        .balance-value {
+            font-size: 42px;
+            font-weight: 800;
+            color: #fff;
+            text-shadow: 0 0 20px #ffd700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .balance-value span {
+            font-size: 18px;
+            color: #ffd700;
+        }
+
+        /* Табы */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 6px;
+            border-radius: 40px;
+            border: 1px solid #7b3f00;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #aaa;
+            text-transform: uppercase;
+        }
+
+        .tab.active {
+            background: linear-gradient(145deg, #ffd700, #ffaa00);
+            color: #0f2a0f;
+            box-shadow: 0 5px 20px #ffd700;
+        }
+
+        /* Контент табов */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ========== КРАШ ========== */
+        .crash-area {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 40px;
+            padding: 20px;
+            border: 2px solid #7b3f00;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            min-height: 300px;
+        }
+
+        .rocket-container {
+            position: relative;
+            height: 200px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            border-radius: 30px;
+            background: linear-gradient(to top, #1a2a1a, #0a1a0a);
+        }
+
+        .rocket {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            font-size: 60px;
+            animation: fly 8s linear infinite;
+            filter: drop-shadow(0 0 20px #ffd700);
+            z-index: 5;
+        }
+
+        .rocket.pepe {
+            transform: scaleX(-1);
+        }
+
+        @keyframes fly {
+            0% { bottom: 10px; left: 10px; transform: scaleX(-1) rotate(0deg); }
+            25% { bottom: 50px; left: 30%; transform: scaleX(-1) rotate(5deg); }
+            50% { bottom: 100px; left: 50%; transform: scaleX(-1) rotate(10deg); }
+            75% { bottom: 150px; left: 70%; transform: scaleX(-1) rotate(5deg); }
+            100% { bottom: 200px; left: 90%; transform: scaleX(-1) rotate(0deg); opacity: 0; }
+        }
+
+        .crash-multiplier {
+            font-size: 64px;
+            font-weight: 800;
+            color: #ffd700;
+            text-align: center;
+            text-shadow: 0 0 30px #ffaa00;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #1e3a1e;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+            border: 1px solid #7b3f00;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #ffd700, #ffaa00, #ff8c00);
+            transition: width 0.1s linear;
+            box-shadow: 0 0 20px #ffd700;
+        }
+
+        .crash-controls {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .crash-bet {
+            flex: 2;
+        }
+
+        .crash-bet select {
+            width: 100%;
+            padding: 15px;
+            background: #1e3a1e;
+            border: 2px solid #7b3f00;
+            border-radius: 20px;
+            color: #ffd700;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .crash-cashout {
+            flex: 1;
+            background: linear-gradient(145deg, #ffd700, #ffaa00);
+            border: none;
+            border-radius: 20px;
+            color: #0f2a0f;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .crash-cashout:active {
+            transform: scale(0.95);
+        }
+
+        .crash-cashout:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .fake-wins-feed {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
+            padding: 15px;
+            margin-top: 20px;
+            border: 1px solid #7b3f00;
+        }
+
+        .feed-title {
+            color: #ffd700;
+            font-size: 14px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .feed-item {
+            padding: 8px;
+            margin: 5px 0;
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 10px;
+            font-size: 14px;
+            animation: slideIn 0.3s;
+            border-left: 3px solid #ffd700;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* ========== СЛОТ TATTOO HORSES ========== */
+        .slot-area {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 40px;
+            padding: 20px;
+            border: 2px solid #7b3f00;
+            margin-bottom: 20px;
+        }
+
+        .slot-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .slot-title h2 {
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(145deg, #ffd700, #ffaa00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+        }
+
+        .slot-title span {
+            font-size: 30px;
+        }
+
+        .slot-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            background: #1e3a1e;
+            padding: 15px;
+            border-radius: 30px;
+            border: 2px solid #7b3f00;
+            margin-bottom: 20px;
+        }
+
+        .slot-cell {
+            aspect-ratio: 1;
+            background: #0f2a0f;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            border: 2px solid #7b3f00;
+            transition: all 0.1s;
+        }
+
+        .slot-cell.spinning {
+            animation: spinCell 0.2s linear infinite;
+        }
+
+        @keyframes spinCell {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); filter: brightness(1.5); }
+            100% { transform: scale(1); }
+        }
+
+        .slot-cell.win {
+            border-color: #ffd700;
+            box-shadow: 0 0 20px #ffd700;
+        }
+
+        .slot-controls {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .slot-bet {
+            flex: 2;
+        }
+
+        .slot-bet select {
+            width: 100%;
+            padding: 15px;
+            background: #1e3a1e;
+            border: 2px solid #7b3f00;
+            border-radius: 20px;
+            color: #ffd700;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .slot-spin {
+            flex: 1;
+            background: linear-gradient(145deg, #ffd700, #ffaa00);
+            border: none;
+            border-radius: 20px;
+            color: #0f2a0f;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .slot-spin:active {
+            transform: scale(0.95);
+        }
+
+        .slot-spin:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .paytable {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .pay-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #7b3f00;
+        }
+
+        .pay-symbol {
+            font-size: 30px;
+        }
+
+        .pay-desc {
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        .pay-mult {
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        /* ========== КЕЙСЫ ========== */
+        .cases-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .case-item {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 20px;
+            border: 2px solid;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .case-item::before {
+            content: "🐸";
+            position: absolute;
+            font-size: 80px;
+            opacity: 0.1;
+            bottom: -20px;
+            right: -20px;
+            transform: rotate(20deg);
+        }
+
+        .case-item.common { border-color: #4a704a; }
+        .case-item.rare { border-color: #4a704a; box-shadow: 0 0 20px #4a704a; }
+        .case-item.epic { border-color: #b8860b; box-shadow: 0 0 20px #b8860b; }
+        .case-item.legendary { border-color: #ffd700; box-shadow: 0 0 30px #ffd700; }
+
+        .case-item:active {
+            transform: scale(0.95);
+        }
+
+        .case-icon {
+            font-size: 60px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .case-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #fff;
+        }
+
+        .case-price {
+            font-size: 20px;
+            font-weight: 800;
+            color: #ffd700;
+        }
+
+        .case-items {
+            margin-top: 10px;
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+        }
+
+        .case-item-preview {
+            font-size: 24px;
+            opacity: 0.7;
+        }
+
+        /* ========== КНОПКИ СТАВОК ========== */
+        .bet-selector {
+            display: flex;
+            gap: 8px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .bet-option {
+            flex: 1;
+            min-width: 60px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #7b3f00;
+            color: #fff;
+            padding: 12px 5px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .bet-option.active {
+            background: #ffd700;
+            color: #0f2a0f;
+            border-color: #ffaa00;
+            box-shadow: 0 0 20px #ffd700;
+        }
+
+        /* ========== ПОПАП РЕЗУЛЬТАТА ========== */
+        .result-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(145deg, #1e3a1e, #0f2a0f);
+            border: 4px solid #ffd700;
+            border-radius: 50px;
+            padding: 40px;
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 0 100px #ffd700;
+            display: none;
+            min-width: 300px;
+        }
+
+        .result-emoji {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .result-title {
+            font-size: 36px;
+            font-weight: 800;
+            color: #ffd700;
+            margin-bottom: 15px;
+        }
+
+        .result-amount {
+            font-size: 48px;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 25px;
+        }
+
+        .result-close {
+            background: linear-gradient(145deg, #ffd700, #ffaa00);
+            border: none;
+            color: #0f2a0f;
+            padding: 15px 40px;
+            border-radius: 40px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* ========== УВЕДОМЛЕНИЯ ========== */
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(145deg, #ffd700, #ffaa00);
+            color: #0f2a0f;
+            padding: 15px 30px;
+            border-radius: 40px;
+            font-weight: bold;
+            z-index: 2000;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.5);
+            animation: slideDown 0.3s;
+        }
+
+        @keyframes slideDown {
+            from { transform: translate(-50%, -100%); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Хедер -->
+        <div class="header">
+            <div class="user-row">
+                <div class="pepe-avatar">
+                    🐸
+                </div>
+                <div class="user-info">
+                    <h3 id="userName">PEPE</h3>
+                    <p id="userStats">Игр: 0 | Побед: 0</p>
+                </div>
+            </div>
+            <div class="balance-block">
+                <div class="balance-label">💰 БАЛАНС</div>
+                <div class="balance-value" id="balance">
+                    1000 <span>GC</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Табы -->
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('crash')">💥 КРАШ</div>
+            <div class="tab" onclick="switchTab('slots')">🐎 СЛОТЫ</div>
+            <div class="tab" onclick="switchTab('cases')">🎁 КЕЙСЫ</div>
+        </div>
+
+        <!-- КРАШ -->
+        <div id="tab-crash" class="tab-content active">
+            <div class="crash-area">
+                <div class="rocket-container">
+                    <div class="rocket pepe" id="rocket">
+                        🐸🚀
+                    </div>
+                </div>
+
+                <div class="crash-multiplier" id="crashMultiplier">
+                    1.00x
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" id="crashProgress" style="width: 0%;"></div>
+                </div>
+
+                <div class="crash-controls">
+                    <div class="crash-bet">
+                        <select id="crashBetAmount">
+                            <option value="100">💰 100 GC</option>
+                            <option value="500">💰 500 GC</option>
+                            <option value="1000">💰 1000 GC</option>
+                            <option value="5000">💰 5000 GC</option>
+                        </select>
+                    </div>
+                    <button class="crash-cashout" id="crashBtn" onclick="placeCrashBet()">
+                        🚀 СТАВКА
+                    </button>
+                </div>
+
+                <div class="fake-wins-feed" id="fakeWinFeed">
+                    <div class="feed-title">🔥 ГОРЯЧИЕ ВЫИГРЫШИ</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- СЛОТЫ -->
+        <div id="tab-slots" class="tab-content">
+            <div class="slot-area">
+                <div class="slot-title">
+                    <span>🐎</span>
+                    <h2>TATTOO HORSES</h2>
+                </div>
+
+                <div class="slot-grid" id="slotGrid">
+                    <!-- Генерируется через JS -->
+                </div>
+
+                <div class="slot-controls">
+                    <div class="slot-bet">
+                        <select id="slotBetAmount">
+                            <option value="100">💰 100 GC</option>
+                            <option value="500">💰 500 GC</option>
+                            <option value="1000">💰 1000 GC</option>
+                            <option value="5000">💰 5000 GC</option>
+                        </select>
+                    </div>
+                    <button class="slot-spin" id="slotSpinBtn" onclick="spinSlot()">
+                        🎰 SPIN
+                    </button>
+                </div>
+
+                <div class="paytable">
+                    <div class="pay-item">
+                        <span class="pay-symbol">🐎✨</span>
+                        <div>
+                            <div class="pay-desc">Золотой конь</div>
+                            <div class="pay-mult">x5</div>
+                        </div>
+                    </div>
+                    <div class="pay-item">
+                        <span class="pay-symbol">🐎⭐</span>
+                        <div>
+                            <div class="pay-desc">Серебряный конь</div>
+                            <div class="pay-mult">x3</div>
+                        </div>
+                    </div>
+                    <div class="pay-item">
+                        <span class="pay-symbol">🐎</span>
+                        <div>
+                            <div class="pay-desc">Бронзовый конь</div>
+                            <div class="pay-mult">x2</div>
+                        </div>
+                    </div>
+                    <div class="pay-item">
+                        <span class="pay-symbol">👑</span>
+                        <div>
+                            <div class="pay-desc">Подкова</div>
+                            <div class="pay-mult">x10</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- КЕЙСЫ -->
+        <div id="tab-cases" class="tab-content">
+            <div class="cases-grid">
+                <div class="case-item common" onclick="openCase('common')">
+                    <div class="case-icon">🐸📦</div>
+                    <div class="case-name">Зелёный кейс</div>
+                    <div class="case-price">100 GC</div>
+                    <div class="case-items">
+                        <span class="case-item-preview">🐎</span>
+                        <span class="case-item-preview">🐎⭐</span>
+                        <span class="case-item-preview">👑</span>
+                    </div>
+                </div>
+
+                <div class="case-item rare" onclick="openCase('rare')">
+                    <div class="case-icon">🐸💎</div>
+                    <div class="case-name">Золотой кейс</div>
+                    <div class="case-price">500 GC</div>
+                    <div class="case-items">
+                        <span class="case-item-preview">🐎⭐</span>
+                        <span class="case-item-preview">🐎✨</span>
+                        <span class="case-item-preview">👑</span>
+                    </div>
+                </div>
+
+                <div class="case-item epic" onclick="openCase('epic')">
+                    <div class="case-icon">🐸🔥</div>
+                    <div class="case-name">Огненный кейс</div>
+                    <div class="case-price">1000 GC</div>
+                    <div class="case-items">
+                        <span class="case-item-preview">🐎✨</span>
+                        <span class="case-item-preview">👑</span>
+                        <span class="case-item-preview">💀</span>
+                    </div>
+                </div>
+
+                <div class="case-item legendary" onclick="openCase('legendary')">
+                    <div class="case-icon">🐸👑</div>
+                    <div class="case-name">Легендарный кейс</div>
+                    <div class="case-price">5000 GC</div>
+                    <div class="case-items">
+                        <span class="case-item-preview">👑</span>
+                        <span class="case-item-preview">🔥</span>
+                        <span class="case-item-preview">💀</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Попап результата -->
+    <div class="result-popup" id="resultPopup">
+        <div class="result-emoji" id="resultEmoji">🎉</div>
+        <div class="result-title" id="resultTitle">ВЫИГРЫШ</div>
+        <div class="result-amount" id="resultAmount">+0</div>
+        <button class="result-close" onclick="closeResult()">ОК</button>
+    </div>
+
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.ready();
+
+        let userId = tg.initDataUnsafe?.user?.id || 1;
+        let currentBalance = 1000;
+        let currentBet = 100;
+        let crashInterval = null;
+        let crashMultiplier = 1.0;
+        let hasBet = false;
+
+        // Загрузка данных
+        async function loadUserData() {
+            try {
+                let res = await fetch(`/api/user?user_id=${userId}`);
+                let data = await res.json();
+                currentBalance = data.balance;
+                updateBalance();
+                document.getElementById('userStats').textContent = `Игр: ${data.games} | Побед: ${data.wins}`;
+            } catch(e) {
+                console.log('Ошибка загрузки');
+            }
+        }
+
+        function updateBalance() {
+            document.getElementById('balance').textContent = currentBalance;
+        }
+
+        // Переключение табов
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+            event.target.classList.add('active');
+            document.getElementById(`tab-${tab}`).classList.add('active');
+        }
+
+        // ========== КРАШ ==========
+        function placeCrashBet() {
+            if (hasBet) {
+                cashoutCrash();
+                return;
+            }
+
+            let bet = parseInt(document.getElementById('crashBetAmount').value);
+
+            if (currentBalance < bet) {
+                showNotification('❌ Недостаточно средств!');
+                return;
+            }
+
+            hasBet = true;
+            currentBalance -= bet;
+            updateBalance();
+
+            document.getElementById('crashBtn').textContent = '💸 ЗАБРАТЬ';
+            crashMultiplier = 1.0;
+
+            // Запускаем краш
+            if (crashInterval) clearInterval(crashInterval);
+            crashInterval = setInterval(() => {
+                crashMultiplier += 0.05;
+                document.getElementById('crashMultiplier').textContent = crashMultiplier.toFixed(2) + 'x';
+                document.getElementById('crashProgress').style.width = Math.min(crashMultiplier * 10, 100) + '%';
+
+                // Случайный краш (для демо)
+                if (Math.random() < 0.02) {
+                    crashGame();
+                }
+            }, 100);
+
+            // Добавляем фейковые выигрыши
+            addFakeWin();
+        }
+
+        function cashoutCrash() {
+            if (!hasBet) return;
+
+            clearInterval(crashInterval);
+            let winAmount = Math.floor(currentBet * crashMultiplier);
+            currentBalance += winAmount;
+            updateBalance();
+
+            showResult('💥 ВЫИГРАЛ!', `+${winAmount}`);
+            hasBet = false;
+            document.getElementById('crashBtn').textContent = '🚀 СТАВКА';
+        }
+
+        function crashGame() {
+            clearInterval(crashInterval);
+            showResult('💥 КРАШ!', `-${currentBet}`);
+            hasBet = false;
+            document.getElementById('crashBtn').textContent = '🚀 СТАВКА';
+        }
+
+        function addFakeWin() {
+            let feed = document.getElementById('fakeWinFeed');
+            let names = ['PEPE', 'GROK', 'FROG', 'GEBONG', 'TATTOO'];
+            let mults = [5.2, 8.7, 12.4, 15.8, 3.2, 6.7];
+
+            let item = document.createElement('div');
+            item.className = 'feed-item';
+            item.innerHTML = `🔥 ${names[Math.floor(Math.random()*names.length)]} забрал x${mults[Math.floor(Math.random()*mults.length)]}`;
+
+            feed.appendChild(item);
+            if (feed.children.length > 5) {
+                feed.removeChild(feed.children[1]);
+            }
+        }
+
+        setInterval(() => {
+            if (!hasBet) {
+                addFakeWin();
+            }
+        }, 3000);
+
+        // ========== СЛОТЫ ==========
+        function initSlotGrid() {
+            let grid = document.getElementById('slotGrid');
+            let html = '';
+            for (let i = 0; i < 15; i++) {
+                html += `<div class="slot-cell">${['🐎', '🐎⭐', '🐎✨', '👑', '💀', '🔥'][Math.floor(Math.random()*6)]}</div>`;
+            }
+            grid.innerHTML = html;
+        }
+
+        async function spinSlot() {
+            let bet = parseInt(document.getElementById('slotBetAmount').value);
+
+            if (currentBalance < bet) {
+                showNotification('❌ Недостаточно средств!');
+                return;
+            }
+
+            // Анимация
+            document.querySelectorAll('.slot-cell').forEach(cell => {
+                cell.classList.add('spinning');
+            });
+
+            document.getElementById('slotSpinBtn').disabled = true;
+
+            try {
+                let res = await fetch('/api/slot/spin', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        user_id: userId,
+                        bet: bet
+                    })
+                });
+
+                let data = await res.json();
+
+                setTimeout(() => {
+                    // Обновляем ячейки
+                    let cells = document.querySelectorAll('.slot-cell');
+                    let idx = 0;
+                    for (let col = 0; col < 5; col++) {
+                        for (let row = 0; row < 3; row++) {
+                            let sym = data.reels[col][row];
+                            let emoji = {
+                                'gold_horse': '🐎✨',
+                                'silver_horse': '🐎⭐',
+                                'bronze_horse': '🐎',
+                                'horseshoe': '👑',
+                                'skull': '💀',
+                                'fire': '🔥'
+                            }[sym] || '🐎';
+
+                            cells[idx].textContent = emoji;
+                            cells[idx].classList.remove('spinning');
+                            idx++;
+                        }
+                    }
+
+                    currentBalance = data.new_balance;
+                    updateBalance();
+
+                    if (data.win_amount > 0) {
+                        showResult('🎰 ВЫИГРЫШ!', `+${data.win_amount}`);
+                    }
+
+                    document.getElementById('slotSpinBtn').disabled = false;
+                }, 500);
+
+            } catch(e) {
+                console.log('Ошибка слота');
+                document.getElementById('slotSpinBtn').disabled = false;
+            }
+        }
+
+        // ========== КЕЙСЫ ==========
+        function openCase(type) {
+            let prices = {
+                'common': 100,
+                'rare': 500,
+                'epic': 1000,
+                'legendary': 5000
+            };
+
+            let price = prices[type];
+
+            if (currentBalance < price) {
+                showNotification('❌ Недостаточно средств!');
+                return;
+            }
+
+            currentBalance -= price;
+            updateBalance();
+
+            let rewards = {
+                'common': ['🐎', '🐎', '🐎⭐', '🐎'],
+                'rare': ['🐎⭐', '🐎✨', '🐎⭐', '👑'],
+                'epic': ['🐎✨', '👑', '🔥', '🐎✨'],
+                'legendary': ['👑', '🔥', '💀', '👑', '🔥']
+            };
+
+            let reward = rewards[type][Math.floor(Math.random() * rewards[type].length)];
+            let mult = {
+                '🐎': 50,
+                '🐎⭐': 150,
+                '🐎✨': 300,
+                '👑': 500,
+                '🔥': 200,
+                '💀': 100
+            }[reward] || 100;
+
+            currentBalance += mult;
+            updateBalance();
+            showResult('🎁 НАГРАДА!', `+${mult}`);
+        }
+
+        // ========== ОБЩИЕ ФУНКЦИИ ==========
+        function showResult(title, amount) {
+            document.getElementById('resultEmoji').textContent = title.includes('ВЫИГРЫШ') ? '🎉💰🎉' : '💥';
+            document.getElementById('resultTitle').textContent = title;
+            document.getElementById('resultAmount').textContent = amount;
+            document.getElementById('resultPopup').style.display = 'block';
+        }
+
+        function closeResult() {
+            document.getElementById('resultPopup').style.display = 'none';
+        }
+
+        function showNotification(msg) {
+            let notif = document.createElement('div');
+            notif.className = 'notification';
+            notif.textContent = msg;
+            document.body.appendChild(notif);
+            setTimeout(() => notif.remove(), 2000);
+        }
+
+        // Инициализация
+        initSlotGrid();
+        loadUserData();
+    </script>
+</body>
+</html>
